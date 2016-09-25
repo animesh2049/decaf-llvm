@@ -1,0 +1,2252 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE
+
+    2 field_decls: field_decls field_decl
+    3            | field_decl
+
+    4 method_decls: method_decls method_decl
+    5             | method_decl
+
+    6 field_decl: type id_all_list SEMICOLON
+
+    7 id_all_list: id_all_list COMMA IDENTIFIER
+    8            | id_all_list COMMA id_array
+    9            | IDENTIFIER
+   10            | id_array
+
+   11 id_array: IDENTIFIER O_BRACE INT_LITERAL C_BRACE
+
+   12 method_decl: type IDENTIFIER O_PAREN method_id_List C_PAREN block
+   13            | VOID IDENTIFIER O_PAREN method_id_List C_PAREN block
+
+   14 method_id_List: method_id_List COMMA type IDENTIFIER
+   15               | type IDENTIFIER
+
+   16 block: O_CUR_BRACE var_decls statements C_CUR_BRACE
+
+   17 var_decls: var_decls var_decl
+   18          | var_decl
+
+   19 var_decl: type ids SEMICOLON
+
+   20 ids: ids COMMA IDENTIFIER
+   21    | IDENTIFIER
+
+   22 statements: statements statement
+   23           | statement
+
+   24 statement: block
+   25          | location assign_op expr SEMICOLON
+   26          | method_call SEMICOLON
+   27          | IF O_PAREN expr C_PAREN block ELSE block
+   28          | IF O_PAREN expr C_PAREN block
+   29          | FOR IDENTIFIER EQUAL expr COMMA expr block
+   30          | RETURN SEMICOLON
+   31          | RETURN expr SEMICOLON
+   32          | BREAK SEMICOLON
+   33          | CONTINUE SEMICOLON
+
+   34 assign_op: EQUAL
+   35          | PLUS_EQUAL
+   36          | MINUS_EQUAL
+
+   37 location: IDENTIFIER
+   38         | IDENTIFIER O_BRACE expr C_BRACE
+
+   39 method_call: IDENTIFIER O_PAREN exprs C_PAREN
+   40            | IDENTIFIER O_PAREN C_PAREN
+   41            | CALLOUT O_PAREN STRING_LITERAL C_PAREN
+   42            | CALLOUT O_PAREN STRING_LITERAL COMMA callout_args C_PAREN
+
+   43 callout_args: callout_args COMMA callout_arg
+   44             | callout_arg
+
+   45 callout_arg: expr
+   46            | STRING_LITERAL
+
+   47 exprs: exprs COMMA expr
+   48      | expr
+
+   49 expr: location
+   50     | method_call
+   51     | literal
+   52     | expr OP_PLUS expr
+   53     | expr OP_MINUS expr
+   54     | expr OP_MULTIPLY expr
+   55     | expr OP_DIVIDE expr
+   56     | expr OP_MODULO expr
+   57     | expr OP_LESS_THAN expr
+   58     | expr OP_GREATER_THAN expr
+   59     | expr OP_LESS_EQUAL expr
+   60     | expr OP_GREATER_EQUAL expr
+   61     | expr OP_EQUAL_EQUAL expr
+   62     | expr OP_NOT_EQUAL expr
+   63     | expr OP_LOGICAL_OR expr
+   64     | expr OP_LOGICAL_AND expr
+   65     | OP_NOT expr
+   66     | O_PAREN expr C_PAREN
+
+   67 literal: INT_LITERAL
+   68        | CHAR_LITERAL
+   69        | TRUE
+   70        | FALSE
+
+   71 type: TYPE_INTEGER
+   72     | TYPE_BOOLEAN
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+BREAK (258) 32
+CALLOUT (259) 41 42
+CLASS (260) 1
+CONTINUE (261) 33
+ELSE (262) 27
+FALSE (263) 70
+FOR (264) 29
+IF (265) 27 28
+RETURN (266) 30 31
+TRUE (267) 69
+VOID (268) 13
+COMMA (269) 7 8 14 20 29 42 43 47
+TYPE_BOOLEAN (270) 72
+TYPE_INTEGER (271) 71
+O_CUR_BRACE (272) 1 16
+C_CUR_BRACE (273) 1 16
+O_PAREN (274) 12 13 27 28 39 40 41 42 66
+C_PAREN (275) 12 13 27 28 39 40 41 42 66
+SEMICOLON (276) 6 19 25 26 30 31 32 33
+O_BRACE (277) 11 38
+C_BRACE (278) 11 38
+OP_LOGICAL_OR (279) 63
+OP_LOGICAL_AND (280) 64
+EQUAL (281) 29 34
+PLUS_EQUAL (282) 35
+MINUS_EQUAL (283) 36
+OP_NOT_EQUAL (284) 62
+OP_EQUAL_EQUAL (285) 61
+OP_LESS_THAN (286) 57
+OP_GREATER_THAN (287) 58
+OP_LESS_EQUAL (288) 59
+OP_GREATER_EQUAL (289) 60
+OP_PLUS (290) 52
+OP_MINUS (291) 53
+OP_MULTIPLY (292) 54
+OP_DIVIDE (293) 55
+OP_MODULO (294) 56
+OP_NOT (295) 65
+IDENTIFIER (296) 1 7 9 11 12 13 14 15 20 21 29 37 38 39 40
+INT_LITERAL (297) 11 67
+STRING_LITERAL (298) 41 42 46
+CHAR_LITERAL (299) 68
+
+
+Nonterminals, with rules where they appear
+
+$accept (45)
+    on left: 0
+program (46)
+    on left: 1, on right: 0
+field_decls (47)
+    on left: 2 3, on right: 1 2
+method_decls (48)
+    on left: 4 5, on right: 1 4
+field_decl (49)
+    on left: 6, on right: 2 3
+id_all_list (50)
+    on left: 7 8 9 10, on right: 6 7 8
+id_array (51)
+    on left: 11, on right: 8 10
+method_decl (52)
+    on left: 12 13, on right: 4 5
+method_id_List (53)
+    on left: 14 15, on right: 12 13 14
+block (54)
+    on left: 16, on right: 12 13 24 27 28 29
+var_decls (55)
+    on left: 17 18, on right: 16 17
+var_decl (56)
+    on left: 19, on right: 17 18
+ids (57)
+    on left: 20 21, on right: 19 20
+statements (58)
+    on left: 22 23, on right: 16 22
+statement (59)
+    on left: 24 25 26 27 28 29 30 31 32 33, on right: 22 23
+assign_op (60)
+    on left: 34 35 36, on right: 25
+location (61)
+    on left: 37 38, on right: 25 49
+method_call (62)
+    on left: 39 40 41 42, on right: 26 50
+callout_args (63)
+    on left: 43 44, on right: 42 43
+callout_arg (64)
+    on left: 45 46, on right: 43 44
+exprs (65)
+    on left: 47 48, on right: 39 47
+expr (66)
+    on left: 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66,
+    on right: 25 27 28 29 31 38 45 47 48 52 53 54 55 56 57 58 59 60
+    61 62 63 64 65 66
+literal (67)
+    on left: 67 68 69 70, on right: 51
+type (68)
+    on left: 71 72, on right: 6 12 14 15 19
+
+
+State 0
+
+    0 $accept: . program $end
+
+    CLASS  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: CLASS . IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE
+
+    IDENTIFIER  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: CLASS IDENTIFIER . O_CUR_BRACE field_decls method_decls C_CUR_BRACE
+
+    O_CUR_BRACE  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 program: CLASS IDENTIFIER O_CUR_BRACE . field_decls method_decls C_CUR_BRACE
+
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    field_decls  go to state 8
+    field_decl   go to state 9
+    type         go to state 10
+
+
+State 6
+
+   72 type: TYPE_BOOLEAN .
+
+    $default  reduce using rule 72 (type)
+
+
+State 7
+
+   71 type: TYPE_INTEGER .
+
+    $default  reduce using rule 71 (type)
+
+
+State 8
+
+    1 program: CLASS IDENTIFIER O_CUR_BRACE field_decls . method_decls C_CUR_BRACE
+    2 field_decls: field_decls . field_decl
+
+    VOID          shift, and go to state 11
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    method_decls  go to state 12
+    field_decl    go to state 13
+    method_decl   go to state 14
+    type          go to state 15
+
+
+State 9
+
+    3 field_decls: field_decl .
+
+    $default  reduce using rule 3 (field_decls)
+
+
+State 10
+
+    6 field_decl: type . id_all_list SEMICOLON
+
+    IDENTIFIER  shift, and go to state 16
+
+    id_all_list  go to state 17
+    id_array     go to state 18
+
+
+State 11
+
+   13 method_decl: VOID . IDENTIFIER O_PAREN method_id_List C_PAREN block
+
+    IDENTIFIER  shift, and go to state 19
+
+
+State 12
+
+    1 program: CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls . C_CUR_BRACE
+    4 method_decls: method_decls . method_decl
+
+    VOID          shift, and go to state 11
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+    C_CUR_BRACE   shift, and go to state 20
+
+    method_decl  go to state 21
+    type         go to state 22
+
+
+State 13
+
+    2 field_decls: field_decls field_decl .
+
+    $default  reduce using rule 2 (field_decls)
+
+
+State 14
+
+    5 method_decls: method_decl .
+
+    $default  reduce using rule 5 (method_decls)
+
+
+State 15
+
+    6 field_decl: type . id_all_list SEMICOLON
+   12 method_decl: type . IDENTIFIER O_PAREN method_id_List C_PAREN block
+
+    IDENTIFIER  shift, and go to state 23
+
+    id_all_list  go to state 17
+    id_array     go to state 18
+
+
+State 16
+
+    9 id_all_list: IDENTIFIER .
+   11 id_array: IDENTIFIER . O_BRACE INT_LITERAL C_BRACE
+
+    O_BRACE  shift, and go to state 24
+
+    $default  reduce using rule 9 (id_all_list)
+
+
+State 17
+
+    6 field_decl: type id_all_list . SEMICOLON
+    7 id_all_list: id_all_list . COMMA IDENTIFIER
+    8            | id_all_list . COMMA id_array
+
+    COMMA      shift, and go to state 25
+    SEMICOLON  shift, and go to state 26
+
+
+State 18
+
+   10 id_all_list: id_array .
+
+    $default  reduce using rule 10 (id_all_list)
+
+
+State 19
+
+   13 method_decl: VOID IDENTIFIER . O_PAREN method_id_List C_PAREN block
+
+    O_PAREN  shift, and go to state 27
+
+
+State 20
+
+    1 program: CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE .
+
+    $default  reduce using rule 1 (program)
+
+
+State 21
+
+    4 method_decls: method_decls method_decl .
+
+    $default  reduce using rule 4 (method_decls)
+
+
+State 22
+
+   12 method_decl: type . IDENTIFIER O_PAREN method_id_List C_PAREN block
+
+    IDENTIFIER  shift, and go to state 28
+
+
+State 23
+
+    9 id_all_list: IDENTIFIER .
+   11 id_array: IDENTIFIER . O_BRACE INT_LITERAL C_BRACE
+   12 method_decl: type IDENTIFIER . O_PAREN method_id_List C_PAREN block
+
+    O_PAREN  shift, and go to state 29
+    O_BRACE  shift, and go to state 24
+
+    $default  reduce using rule 9 (id_all_list)
+
+
+State 24
+
+   11 id_array: IDENTIFIER O_BRACE . INT_LITERAL C_BRACE
+
+    INT_LITERAL  shift, and go to state 30
+
+
+State 25
+
+    7 id_all_list: id_all_list COMMA . IDENTIFIER
+    8            | id_all_list COMMA . id_array
+
+    IDENTIFIER  shift, and go to state 31
+
+    id_array  go to state 32
+
+
+State 26
+
+    6 field_decl: type id_all_list SEMICOLON .
+
+    $default  reduce using rule 6 (field_decl)
+
+
+State 27
+
+   13 method_decl: VOID IDENTIFIER O_PAREN . method_id_List C_PAREN block
+
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    method_id_List  go to state 33
+    type            go to state 34
+
+
+State 28
+
+   12 method_decl: type IDENTIFIER . O_PAREN method_id_List C_PAREN block
+
+    O_PAREN  shift, and go to state 29
+
+
+State 29
+
+   12 method_decl: type IDENTIFIER O_PAREN . method_id_List C_PAREN block
+
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    method_id_List  go to state 35
+    type            go to state 34
+
+
+State 30
+
+   11 id_array: IDENTIFIER O_BRACE INT_LITERAL . C_BRACE
+
+    C_BRACE  shift, and go to state 36
+
+
+State 31
+
+    7 id_all_list: id_all_list COMMA IDENTIFIER .
+   11 id_array: IDENTIFIER . O_BRACE INT_LITERAL C_BRACE
+
+    O_BRACE  shift, and go to state 24
+
+    $default  reduce using rule 7 (id_all_list)
+
+
+State 32
+
+    8 id_all_list: id_all_list COMMA id_array .
+
+    $default  reduce using rule 8 (id_all_list)
+
+
+State 33
+
+   13 method_decl: VOID IDENTIFIER O_PAREN method_id_List . C_PAREN block
+   14 method_id_List: method_id_List . COMMA type IDENTIFIER
+
+    COMMA    shift, and go to state 37
+    C_PAREN  shift, and go to state 38
+
+
+State 34
+
+   15 method_id_List: type . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 39
+
+
+State 35
+
+   12 method_decl: type IDENTIFIER O_PAREN method_id_List . C_PAREN block
+   14 method_id_List: method_id_List . COMMA type IDENTIFIER
+
+    COMMA    shift, and go to state 37
+    C_PAREN  shift, and go to state 40
+
+
+State 36
+
+   11 id_array: IDENTIFIER O_BRACE INT_LITERAL C_BRACE .
+
+    $default  reduce using rule 11 (id_array)
+
+
+State 37
+
+   14 method_id_List: method_id_List COMMA . type IDENTIFIER
+
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    type  go to state 41
+
+
+State 38
+
+   13 method_decl: VOID IDENTIFIER O_PAREN method_id_List C_PAREN . block
+
+    O_CUR_BRACE  shift, and go to state 42
+
+    block  go to state 43
+
+
+State 39
+
+   15 method_id_List: type IDENTIFIER .
+
+    $default  reduce using rule 15 (method_id_List)
+
+
+State 40
+
+   12 method_decl: type IDENTIFIER O_PAREN method_id_List C_PAREN . block
+
+    O_CUR_BRACE  shift, and go to state 42
+
+    block  go to state 44
+
+
+State 41
+
+   14 method_id_List: method_id_List COMMA type . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 45
+
+
+State 42
+
+   16 block: O_CUR_BRACE . var_decls statements C_CUR_BRACE
+
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+
+    var_decls  go to state 46
+    var_decl   go to state 47
+    type       go to state 48
+
+
+State 43
+
+   13 method_decl: VOID IDENTIFIER O_PAREN method_id_List C_PAREN block .
+
+    $default  reduce using rule 13 (method_decl)
+
+
+State 44
+
+   12 method_decl: type IDENTIFIER O_PAREN method_id_List C_PAREN block .
+
+    $default  reduce using rule 12 (method_decl)
+
+
+State 45
+
+   14 method_id_List: method_id_List COMMA type IDENTIFIER .
+
+    $default  reduce using rule 14 (method_id_List)
+
+
+State 46
+
+   16 block: O_CUR_BRACE var_decls . statements C_CUR_BRACE
+   17 var_decls: var_decls . var_decl
+
+    BREAK         shift, and go to state 49
+    CALLOUT       shift, and go to state 50
+    CONTINUE      shift, and go to state 51
+    FOR           shift, and go to state 52
+    IF            shift, and go to state 53
+    RETURN        shift, and go to state 54
+    TYPE_BOOLEAN  shift, and go to state 6
+    TYPE_INTEGER  shift, and go to state 7
+    O_CUR_BRACE   shift, and go to state 42
+    IDENTIFIER    shift, and go to state 55
+
+    block        go to state 56
+    var_decl     go to state 57
+    statements   go to state 58
+    statement    go to state 59
+    location     go to state 60
+    method_call  go to state 61
+    type         go to state 48
+
+
+State 47
+
+   18 var_decls: var_decl .
+
+    $default  reduce using rule 18 (var_decls)
+
+
+State 48
+
+   19 var_decl: type . ids SEMICOLON
+
+    IDENTIFIER  shift, and go to state 62
+
+    ids  go to state 63
+
+
+State 49
+
+   32 statement: BREAK . SEMICOLON
+
+    SEMICOLON  shift, and go to state 64
+
+
+State 50
+
+   41 method_call: CALLOUT . O_PAREN STRING_LITERAL C_PAREN
+   42            | CALLOUT . O_PAREN STRING_LITERAL COMMA callout_args C_PAREN
+
+    O_PAREN  shift, and go to state 65
+
+
+State 51
+
+   33 statement: CONTINUE . SEMICOLON
+
+    SEMICOLON  shift, and go to state 66
+
+
+State 52
+
+   29 statement: FOR . IDENTIFIER EQUAL expr COMMA expr block
+
+    IDENTIFIER  shift, and go to state 67
+
+
+State 53
+
+   27 statement: IF . O_PAREN expr C_PAREN block ELSE block
+   28          | IF . O_PAREN expr C_PAREN block
+
+    O_PAREN  shift, and go to state 68
+
+
+State 54
+
+   30 statement: RETURN . SEMICOLON
+   31          | RETURN . expr SEMICOLON
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    SEMICOLON     shift, and go to state 72
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 78
+    literal      go to state 79
+
+
+State 55
+
+   37 location: IDENTIFIER .
+   38         | IDENTIFIER . O_BRACE expr C_BRACE
+   39 method_call: IDENTIFIER . O_PAREN exprs C_PAREN
+   40            | IDENTIFIER . O_PAREN C_PAREN
+
+    O_PAREN  shift, and go to state 80
+    O_BRACE  shift, and go to state 81
+
+    $default  reduce using rule 37 (location)
+
+
+State 56
+
+   24 statement: block .
+
+    $default  reduce using rule 24 (statement)
+
+
+State 57
+
+   17 var_decls: var_decls var_decl .
+
+    $default  reduce using rule 17 (var_decls)
+
+
+State 58
+
+   16 block: O_CUR_BRACE var_decls statements . C_CUR_BRACE
+   22 statements: statements . statement
+
+    BREAK        shift, and go to state 49
+    CALLOUT      shift, and go to state 50
+    CONTINUE     shift, and go to state 51
+    FOR          shift, and go to state 52
+    IF           shift, and go to state 53
+    RETURN       shift, and go to state 54
+    O_CUR_BRACE  shift, and go to state 42
+    C_CUR_BRACE  shift, and go to state 82
+    IDENTIFIER   shift, and go to state 55
+
+    block        go to state 56
+    statement    go to state 83
+    location     go to state 60
+    method_call  go to state 61
+
+
+State 59
+
+   23 statements: statement .
+
+    $default  reduce using rule 23 (statements)
+
+
+State 60
+
+   25 statement: location . assign_op expr SEMICOLON
+
+    EQUAL        shift, and go to state 84
+    PLUS_EQUAL   shift, and go to state 85
+    MINUS_EQUAL  shift, and go to state 86
+
+    assign_op  go to state 87
+
+
+State 61
+
+   26 statement: method_call . SEMICOLON
+
+    SEMICOLON  shift, and go to state 88
+
+
+State 62
+
+   21 ids: IDENTIFIER .
+
+    $default  reduce using rule 21 (ids)
+
+
+State 63
+
+   19 var_decl: type ids . SEMICOLON
+   20 ids: ids . COMMA IDENTIFIER
+
+    COMMA      shift, and go to state 89
+    SEMICOLON  shift, and go to state 90
+
+
+State 64
+
+   32 statement: BREAK SEMICOLON .
+
+    $default  reduce using rule 32 (statement)
+
+
+State 65
+
+   41 method_call: CALLOUT O_PAREN . STRING_LITERAL C_PAREN
+   42            | CALLOUT O_PAREN . STRING_LITERAL COMMA callout_args C_PAREN
+
+    STRING_LITERAL  shift, and go to state 91
+
+
+State 66
+
+   33 statement: CONTINUE SEMICOLON .
+
+    $default  reduce using rule 33 (statement)
+
+
+State 67
+
+   29 statement: FOR IDENTIFIER . EQUAL expr COMMA expr block
+
+    EQUAL  shift, and go to state 92
+
+
+State 68
+
+   27 statement: IF O_PAREN . expr C_PAREN block ELSE block
+   28          | IF O_PAREN . expr C_PAREN block
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 93
+    literal      go to state 79
+
+
+State 69
+
+   70 literal: FALSE .
+
+    $default  reduce using rule 70 (literal)
+
+
+State 70
+
+   69 literal: TRUE .
+
+    $default  reduce using rule 69 (literal)
+
+
+State 71
+
+   66 expr: O_PAREN . expr C_PAREN
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 94
+    literal      go to state 79
+
+
+State 72
+
+   30 statement: RETURN SEMICOLON .
+
+    $default  reduce using rule 30 (statement)
+
+
+State 73
+
+   65 expr: OP_NOT . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 95
+    literal      go to state 79
+
+
+State 74
+
+   67 literal: INT_LITERAL .
+
+    $default  reduce using rule 67 (literal)
+
+
+State 75
+
+   68 literal: CHAR_LITERAL .
+
+    $default  reduce using rule 68 (literal)
+
+
+State 76
+
+   49 expr: location .
+
+    $default  reduce using rule 49 (expr)
+
+
+State 77
+
+   50 expr: method_call .
+
+    $default  reduce using rule 50 (expr)
+
+
+State 78
+
+   31 statement: RETURN expr . SEMICOLON
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    SEMICOLON         shift, and go to state 96
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 79
+
+   51 expr: literal .
+
+    $default  reduce using rule 51 (expr)
+
+
+State 80
+
+   39 method_call: IDENTIFIER O_PAREN . exprs C_PAREN
+   40            | IDENTIFIER O_PAREN . C_PAREN
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    C_PAREN       shift, and go to state 110
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    exprs        go to state 111
+    expr         go to state 112
+    literal      go to state 79
+
+
+State 81
+
+   38 location: IDENTIFIER O_BRACE . expr C_BRACE
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 113
+    literal      go to state 79
+
+
+State 82
+
+   16 block: O_CUR_BRACE var_decls statements C_CUR_BRACE .
+
+    $default  reduce using rule 16 (block)
+
+
+State 83
+
+   22 statements: statements statement .
+
+    $default  reduce using rule 22 (statements)
+
+
+State 84
+
+   34 assign_op: EQUAL .
+
+    $default  reduce using rule 34 (assign_op)
+
+
+State 85
+
+   35 assign_op: PLUS_EQUAL .
+
+    $default  reduce using rule 35 (assign_op)
+
+
+State 86
+
+   36 assign_op: MINUS_EQUAL .
+
+    $default  reduce using rule 36 (assign_op)
+
+
+State 87
+
+   25 statement: location assign_op . expr SEMICOLON
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 114
+    literal      go to state 79
+
+
+State 88
+
+   26 statement: method_call SEMICOLON .
+
+    $default  reduce using rule 26 (statement)
+
+
+State 89
+
+   20 ids: ids COMMA . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 115
+
+
+State 90
+
+   19 var_decl: type ids SEMICOLON .
+
+    $default  reduce using rule 19 (var_decl)
+
+
+State 91
+
+   41 method_call: CALLOUT O_PAREN STRING_LITERAL . C_PAREN
+   42            | CALLOUT O_PAREN STRING_LITERAL . COMMA callout_args C_PAREN
+
+    COMMA    shift, and go to state 116
+    C_PAREN  shift, and go to state 117
+
+
+State 92
+
+   29 statement: FOR IDENTIFIER EQUAL . expr COMMA expr block
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 118
+    literal      go to state 79
+
+
+State 93
+
+   27 statement: IF O_PAREN expr . C_PAREN block ELSE block
+   28          | IF O_PAREN expr . C_PAREN block
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    C_PAREN           shift, and go to state 119
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 94
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+   66     | O_PAREN expr . C_PAREN
+
+    C_PAREN           shift, and go to state 120
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 95
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+   65     | OP_NOT expr .
+
+    $default  reduce using rule 65 (expr)
+
+
+State 96
+
+   31 statement: RETURN expr SEMICOLON .
+
+    $default  reduce using rule 31 (statement)
+
+
+State 97
+
+   63 expr: expr OP_LOGICAL_OR . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 121
+    literal      go to state 79
+
+
+State 98
+
+   64 expr: expr OP_LOGICAL_AND . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 122
+    literal      go to state 79
+
+
+State 99
+
+   62 expr: expr OP_NOT_EQUAL . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 123
+    literal      go to state 79
+
+
+State 100
+
+   61 expr: expr OP_EQUAL_EQUAL . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 124
+    literal      go to state 79
+
+
+State 101
+
+   57 expr: expr OP_LESS_THAN . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 125
+    literal      go to state 79
+
+
+State 102
+
+   58 expr: expr OP_GREATER_THAN . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 126
+    literal      go to state 79
+
+
+State 103
+
+   59 expr: expr OP_LESS_EQUAL . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 127
+    literal      go to state 79
+
+
+State 104
+
+   60 expr: expr OP_GREATER_EQUAL . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 128
+    literal      go to state 79
+
+
+State 105
+
+   52 expr: expr OP_PLUS . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 129
+    literal      go to state 79
+
+
+State 106
+
+   53 expr: expr OP_MINUS . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 130
+    literal      go to state 79
+
+
+State 107
+
+   54 expr: expr OP_MULTIPLY . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 131
+    literal      go to state 79
+
+
+State 108
+
+   55 expr: expr OP_DIVIDE . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 132
+    literal      go to state 79
+
+
+State 109
+
+   56 expr: expr OP_MODULO . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 133
+    literal      go to state 79
+
+
+State 110
+
+   40 method_call: IDENTIFIER O_PAREN C_PAREN .
+
+    $default  reduce using rule 40 (method_call)
+
+
+State 111
+
+   39 method_call: IDENTIFIER O_PAREN exprs . C_PAREN
+   47 exprs: exprs . COMMA expr
+
+    COMMA    shift, and go to state 134
+    C_PAREN  shift, and go to state 135
+
+
+State 112
+
+   48 exprs: expr .
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 48 (exprs)
+
+
+State 113
+
+   38 location: IDENTIFIER O_BRACE expr . C_BRACE
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    C_BRACE           shift, and go to state 136
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 114
+
+   25 statement: location assign_op expr . SEMICOLON
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    SEMICOLON         shift, and go to state 137
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 115
+
+   20 ids: ids COMMA IDENTIFIER .
+
+    $default  reduce using rule 20 (ids)
+
+
+State 116
+
+   42 method_call: CALLOUT O_PAREN STRING_LITERAL COMMA . callout_args C_PAREN
+
+    CALLOUT         shift, and go to state 50
+    FALSE           shift, and go to state 69
+    TRUE            shift, and go to state 70
+    O_PAREN         shift, and go to state 71
+    OP_NOT          shift, and go to state 73
+    IDENTIFIER      shift, and go to state 55
+    INT_LITERAL     shift, and go to state 74
+    STRING_LITERAL  shift, and go to state 138
+    CHAR_LITERAL    shift, and go to state 75
+
+    location      go to state 76
+    method_call   go to state 77
+    callout_args  go to state 139
+    callout_arg   go to state 140
+    expr          go to state 141
+    literal       go to state 79
+
+
+State 117
+
+   41 method_call: CALLOUT O_PAREN STRING_LITERAL C_PAREN .
+
+    $default  reduce using rule 41 (method_call)
+
+
+State 118
+
+   29 statement: FOR IDENTIFIER EQUAL expr . COMMA expr block
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    COMMA             shift, and go to state 142
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+
+State 119
+
+   27 statement: IF O_PAREN expr C_PAREN . block ELSE block
+   28          | IF O_PAREN expr C_PAREN . block
+
+    O_CUR_BRACE  shift, and go to state 42
+
+    block  go to state 143
+
+
+State 120
+
+   66 expr: O_PAREN expr C_PAREN .
+
+    $default  reduce using rule 66 (expr)
+
+
+State 121
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   63     | expr OP_LOGICAL_OR expr .
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 63 (expr)
+
+
+State 122
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+   64     | expr OP_LOGICAL_AND expr .
+
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 64 (expr)
+
+
+State 123
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   62     | expr OP_NOT_EQUAL expr .
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 62 (expr)
+
+
+State 124
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   61     | expr OP_EQUAL_EQUAL expr .
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 61 (expr)
+
+
+State 125
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   57     | expr OP_LESS_THAN expr .
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_PLUS      shift, and go to state 105
+    OP_MINUS     shift, and go to state 106
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    OP_LESS_THAN      error (nonassociative)
+    OP_GREATER_THAN   error (nonassociative)
+    OP_LESS_EQUAL     error (nonassociative)
+    OP_GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 57 (expr)
+
+
+State 126
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   58     | expr OP_GREATER_THAN expr .
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_PLUS      shift, and go to state 105
+    OP_MINUS     shift, and go to state 106
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    OP_LESS_THAN      error (nonassociative)
+    OP_GREATER_THAN   error (nonassociative)
+    OP_LESS_EQUAL     error (nonassociative)
+    OP_GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 58 (expr)
+
+
+State 127
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   59     | expr OP_LESS_EQUAL expr .
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_PLUS      shift, and go to state 105
+    OP_MINUS     shift, and go to state 106
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    OP_LESS_THAN      error (nonassociative)
+    OP_GREATER_THAN   error (nonassociative)
+    OP_LESS_EQUAL     error (nonassociative)
+    OP_GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 59 (expr)
+
+
+State 128
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   60     | expr OP_GREATER_EQUAL expr .
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_PLUS      shift, and go to state 105
+    OP_MINUS     shift, and go to state 106
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    OP_LESS_THAN      error (nonassociative)
+    OP_GREATER_THAN   error (nonassociative)
+    OP_LESS_EQUAL     error (nonassociative)
+    OP_GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 60 (expr)
+
+
+State 129
+
+   52 expr: expr . OP_PLUS expr
+   52     | expr OP_PLUS expr .
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    $default  reduce using rule 52 (expr)
+
+
+State 130
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   53     | expr OP_MINUS expr .
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_MULTIPLY  shift, and go to state 107
+    OP_DIVIDE    shift, and go to state 108
+    OP_MODULO    shift, and go to state 109
+
+    $default  reduce using rule 53 (expr)
+
+
+State 131
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   54     | expr OP_MULTIPLY expr .
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    $default  reduce using rule 54 (expr)
+
+
+State 132
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   55     | expr OP_DIVIDE expr .
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    $default  reduce using rule 55 (expr)
+
+
+State 133
+
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   56     | expr OP_MODULO expr .
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    $default  reduce using rule 56 (expr)
+
+
+State 134
+
+   47 exprs: exprs COMMA . expr
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 144
+    literal      go to state 79
+
+
+State 135
+
+   39 method_call: IDENTIFIER O_PAREN exprs C_PAREN .
+
+    $default  reduce using rule 39 (method_call)
+
+
+State 136
+
+   38 location: IDENTIFIER O_BRACE expr C_BRACE .
+
+    $default  reduce using rule 38 (location)
+
+
+State 137
+
+   25 statement: location assign_op expr SEMICOLON .
+
+    $default  reduce using rule 25 (statement)
+
+
+State 138
+
+   46 callout_arg: STRING_LITERAL .
+
+    $default  reduce using rule 46 (callout_arg)
+
+
+State 139
+
+   42 method_call: CALLOUT O_PAREN STRING_LITERAL COMMA callout_args . C_PAREN
+   43 callout_args: callout_args . COMMA callout_arg
+
+    COMMA    shift, and go to state 145
+    C_PAREN  shift, and go to state 146
+
+
+State 140
+
+   44 callout_args: callout_arg .
+
+    $default  reduce using rule 44 (callout_args)
+
+
+State 141
+
+   45 callout_arg: expr .
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 45 (callout_arg)
+
+
+State 142
+
+   29 statement: FOR IDENTIFIER EQUAL expr COMMA . expr block
+
+    CALLOUT       shift, and go to state 50
+    FALSE         shift, and go to state 69
+    TRUE          shift, and go to state 70
+    O_PAREN       shift, and go to state 71
+    OP_NOT        shift, and go to state 73
+    IDENTIFIER    shift, and go to state 55
+    INT_LITERAL   shift, and go to state 74
+    CHAR_LITERAL  shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    expr         go to state 147
+    literal      go to state 79
+
+
+State 143
+
+   27 statement: IF O_PAREN expr C_PAREN block . ELSE block
+   28          | IF O_PAREN expr C_PAREN block .
+
+    ELSE  shift, and go to state 148
+
+    $default  reduce using rule 28 (statement)
+
+
+State 144
+
+   47 exprs: exprs COMMA expr .
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    $default  reduce using rule 47 (exprs)
+
+
+State 145
+
+   43 callout_args: callout_args COMMA . callout_arg
+
+    CALLOUT         shift, and go to state 50
+    FALSE           shift, and go to state 69
+    TRUE            shift, and go to state 70
+    O_PAREN         shift, and go to state 71
+    OP_NOT          shift, and go to state 73
+    IDENTIFIER      shift, and go to state 55
+    INT_LITERAL     shift, and go to state 74
+    STRING_LITERAL  shift, and go to state 138
+    CHAR_LITERAL    shift, and go to state 75
+
+    location     go to state 76
+    method_call  go to state 77
+    callout_arg  go to state 149
+    expr         go to state 141
+    literal      go to state 79
+
+
+State 146
+
+   42 method_call: CALLOUT O_PAREN STRING_LITERAL COMMA callout_args C_PAREN .
+
+    $default  reduce using rule 42 (method_call)
+
+
+State 147
+
+   29 statement: FOR IDENTIFIER EQUAL expr COMMA expr . block
+   52 expr: expr . OP_PLUS expr
+   53     | expr . OP_MINUS expr
+   54     | expr . OP_MULTIPLY expr
+   55     | expr . OP_DIVIDE expr
+   56     | expr . OP_MODULO expr
+   57     | expr . OP_LESS_THAN expr
+   58     | expr . OP_GREATER_THAN expr
+   59     | expr . OP_LESS_EQUAL expr
+   60     | expr . OP_GREATER_EQUAL expr
+   61     | expr . OP_EQUAL_EQUAL expr
+   62     | expr . OP_NOT_EQUAL expr
+   63     | expr . OP_LOGICAL_OR expr
+   64     | expr . OP_LOGICAL_AND expr
+
+    O_CUR_BRACE       shift, and go to state 42
+    OP_LOGICAL_OR     shift, and go to state 97
+    OP_LOGICAL_AND    shift, and go to state 98
+    OP_NOT_EQUAL      shift, and go to state 99
+    OP_EQUAL_EQUAL    shift, and go to state 100
+    OP_LESS_THAN      shift, and go to state 101
+    OP_GREATER_THAN   shift, and go to state 102
+    OP_LESS_EQUAL     shift, and go to state 103
+    OP_GREATER_EQUAL  shift, and go to state 104
+    OP_PLUS           shift, and go to state 105
+    OP_MINUS          shift, and go to state 106
+    OP_MULTIPLY       shift, and go to state 107
+    OP_DIVIDE         shift, and go to state 108
+    OP_MODULO         shift, and go to state 109
+
+    block  go to state 150
+
+
+State 148
+
+   27 statement: IF O_PAREN expr C_PAREN block ELSE . block
+
+    O_CUR_BRACE  shift, and go to state 42
+
+    block  go to state 151
+
+
+State 149
+
+   43 callout_args: callout_args COMMA callout_arg .
+
+    $default  reduce using rule 43 (callout_args)
+
+
+State 150
+
+   29 statement: FOR IDENTIFIER EQUAL expr COMMA expr block .
+
+    $default  reduce using rule 29 (statement)
+
+
+State 151
+
+   27 statement: IF O_PAREN expr C_PAREN block ELSE block .
+
+    $default  reduce using rule 27 (statement)
