@@ -1,13 +1,14 @@
 %{
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
+#include <fstream>
+#include <string.h>
 
 extern "C" int yylex();
 extern "C" int yyparse();
 extern "C" FILE *yyin;
 extern int yylineno;
-extern fstream flex_outfile;
-extern fstream bison_outfile;
+extern std::fstream flex_outfile;
+extern std::fstream bison_outfile;
 
 void yyerror(const char *s);
 %}
@@ -252,22 +253,26 @@ type:
 
 int main(int argc, char *argv[]){
 	if(argc != 2){
-		yyerror("Usage: parser inputfilepath\n");
+		std::cerr << "Usage: parser inputfilepath\n" << std::endl;
 	}
 	FILE *myfile = fopen(argv[1], "r");
 	if(!myfile){
-		cout << "Unable to open file" << endl;
+		std::cerr << "Unable to open file" << std::endl;
 		return -1;
 	}
-	flex_outfile.open("flex_outfile.txt",std::ios_base::out);
-	bison_outfile.open("bison_outfile.txt",std::ios_base::out);
+	else {
+		yyin = myfile;
+	}
+	flex_outfile.open("flex_output.txt",std::ios_base::out);
+	bison_outfile.open("bison_output.txt",std::ios_base::out);
 	while(!feof(yyin)){
 		yyparse();
 	}
-	cout << "Success" << endl;
+	std::cout << "Success!" << std::endl;
 }
 
 void yyerror(const char *s){
-	cout << "Syntax error at " << yylineno << endl;
+	std::cerr << s << std::endl;
+	std::cerr << "Syntax error at " << yylineno << std::endl;
 	exit(-1);
 }
