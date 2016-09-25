@@ -53,7 +53,7 @@ void yyerror(const char *s);
 
 %left 	<sval> OP_MULTIPLY OP_DIVIDE OP_MODULO
 
-%left 	<sval> OP_NOT
+%precedence OP_NOT OP_UMINUS
 
 %token 	<sval> IDENTIFIER
 %token 	<sval> INT_LITERAL
@@ -64,6 +64,12 @@ void yyerror(const char *s);
 
 program:
 	CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE
+	|
+	CLASS IDENTIFIER O_CUR_BRACE field_decls C_CUR_BRACE
+	|
+	CLASS IDENTIFIER O_CUR_BRACE method_decls C_CUR_BRACE
+	|
+	CLASS IDENTIFIER O_CUR_BRACE C_CUR_BRACE
 	;
 
 field_decls:
@@ -97,19 +103,25 @@ id_array:
 	;
 
 method_decl:
-	type IDENTIFIER O_PAREN method_id_List C_PAREN block
+	type IDENTIFIER O_PAREN method_id_list C_PAREN block
 	|
-	VOID IDENTIFIER O_PAREN method_id_List C_PAREN block
+	VOID IDENTIFIER O_PAREN method_id_list C_PAREN block
 	;
 
-method_id_List:
-	method_id_List COMMA type IDENTIFIER
+method_id_list :
+	method_id_list COMMA type IDENTIFIER
 	|
 	type IDENTIFIER
 	;
 
 block:
 	O_CUR_BRACE var_decls statements C_CUR_BRACE
+	|
+	O_CUR_BRACE statements C_CUR_BRACE
+	|
+	O_CUR_BRACE var_decls C_CUR_BRACE
+	|
+	O_CUR_BRACE C_CUR_BRACE
 	;
 
 var_decls:
@@ -147,9 +159,9 @@ statement:
 	|
 	FOR IDENTIFIER EQUAL expr COMMA expr block
 	|
-	RETURN SEMICOLON
-	|
 	RETURN expr SEMICOLON
+	|
+	RETURN SEMICOLON
 	|
 	BREAK SEMICOLON
 	|
@@ -202,6 +214,8 @@ expr:
 	|
 	literal
 	|
+	O_PAREN expr C_PAREN
+	|
 	expr OP_PLUS expr
 	|
 	expr OP_MINUS expr
@@ -230,7 +244,7 @@ expr:
 	|
 	OP_NOT expr
 	|
-	O_PAREN expr C_PAREN
+	OP_MINUS expr %prec OP_UMINUS
 	;
 
 literal:
@@ -250,26 +264,6 @@ type:
 	;
 
 %%
-
-int main(int argc, char *argv[]){
-	if(argc != 2){
-		std::cerr << "Usage: parser inputfilepath\n" << std::endl;
-	}
-	FILE *myfile = fopen(argv[1], "r");
-	if(!myfile){
-		std::cerr << "Unable to open file" << std::endl;
-		return -1;
-	}
-	else {
-		yyin = myfile;
-	}
-	flex_outfile.open("flex_output.txt",std::ios_base::out);
-	bison_outfile.open("bison_output.txt",std::ios_base::out);
-	while(!feof(yyin)){
-		yyparse();
-	}
-	std::cout << "Success!" << std::endl;
-}
 
 void yyerror(const char *s){
 	std::cerr << s << std::endl;
