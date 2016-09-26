@@ -63,13 +63,13 @@ void yyerror(const char *s);
 %%
 
 program:
-	CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE
+	CLASS IDENTIFIER O_CUR_BRACE field_decls method_decls C_CUR_BRACE		{ bison_outfile << "PROGRAM ENCOUNTERED" << std::endl; }
 	|
-	CLASS IDENTIFIER O_CUR_BRACE field_decls C_CUR_BRACE
+	CLASS IDENTIFIER O_CUR_BRACE field_decls C_CUR_BRACE								{ bison_outfile << "PROGRAM ENCOUNTERED" << std::endl; }
 	|
-	CLASS IDENTIFIER O_CUR_BRACE method_decls C_CUR_BRACE
+	CLASS IDENTIFIER O_CUR_BRACE method_decls C_CUR_BRACE								{ bison_outfile << "PROGRAM ENCOUNTERED" << std::endl; }
 	|
-	CLASS IDENTIFIER O_CUR_BRACE C_CUR_BRACE
+	CLASS IDENTIFIER O_CUR_BRACE C_CUR_BRACE														{ bison_outfile << "PROGRAM ENCOUNTERED" << std::endl; }
 	;
 
 field_decls:
@@ -85,21 +85,21 @@ method_decls:
 	;
 
 field_decl:
-	type id_all_list SEMICOLON
+	type id_all_list SEMICOLON																					{ bison_outfile << "DECLARATION ENCOUNTERED" << std::endl; }
 	;
 
 id_all_list:
-	id_all_list COMMA IDENTIFIER
+	id_all_list COMMA IDENTIFIER																				{ bison_outfile << "ID=" << $3 << std::endl; }
 	|
 	id_all_list COMMA id_array
 	|
-	IDENTIFIER
+	IDENTIFIER																													{ bison_outfile << "ID=" << $1 << std::endl; }
 	|
 	id_array
 	;
 
 id_array:
-	IDENTIFIER O_BRACE INT_LITERAL C_BRACE
+	IDENTIFIER O_BRACE INT_LITERAL C_BRACE															{ bison_outfile << "ID=" << $1 << std::endl << "SIZE=" << $3 << std::endl; }
 	;
 
 method_decl:
@@ -149,7 +149,7 @@ statements:
 statement:
 	block
 	|
-	location assign_op expr SEMICOLON
+	location assign_op expr SEMICOLON																		{ bison_outfile << "ASSIGNMENT OPERATION ENCOUNTERED" << std::endl; }
 	|
 	method_call SEMICOLON
 	|
@@ -177,9 +177,9 @@ assign_op:
 	;
 
 location:
-	IDENTIFIER
+	IDENTIFIER																												{ bison_outfile << "LOCATION ENCOUNTERED=" << $1 << std::endl; }
 	|
-	IDENTIFIER O_BRACE expr C_BRACE
+	IDENTIFIER O_BRACE expr C_BRACE																		{ bison_outfile << "LOCATION ENCOUNTERED=" << $1 << std::endl; }
 	;
 
 method_call:
@@ -187,9 +187,9 @@ method_call:
 	|
 	IDENTIFIER O_PAREN C_PAREN
 	|
-	CALLOUT O_PAREN STRING_LITERAL C_PAREN
+	CALLOUT O_PAREN STRING_LITERAL C_PAREN														{ bison_outfile << "CALLOUT TO " << $3 << " ENCOUNTERED" << std::endl; }
 	|
-	CALLOUT O_PAREN STRING_LITERAL COMMA callout_args C_PAREN
+	CALLOUT O_PAREN STRING_LITERAL COMMA callout_args C_PAREN					{ bison_outfile << "CALLOUT TO " << $3 << " ENCOUNTERED" << std::endl; }
 
 callout_args:
 	callout_args COMMA callout_arg
@@ -216,19 +216,19 @@ expr:
 	|
 	O_PAREN expr C_PAREN
 	|
-	expr OP_PLUS expr
+	expr OP_PLUS expr																									{ bison_outfile << "ADDITION ENCOUNTERED" << std::endl; }
 	|
-	expr OP_MINUS expr
+	expr OP_MINUS expr																								{ bison_outfile << "SUBTRACTION ENCOUNTERED" << std::endl; }
 	|
-	expr OP_MULTIPLY expr
+	expr OP_MULTIPLY expr																							{ bison_outfile << "MULTIPLICATION ENCOUNTERED" << std::endl; }
 	|
-	expr OP_DIVIDE expr
+	expr OP_DIVIDE expr																								{ bison_outfile << "DIVISION ENCOUNTERED" << std::endl; }
 	|
-	expr OP_MODULO expr
+	expr OP_MODULO expr																								{ bison_outfile << "MOD ENCOUNTERED" << std::endl; }
 	|
-	expr OP_LESS_THAN expr
+	expr OP_LESS_THAN expr																						{ bison_outfile << "LESS THAN ENCOUNTERED" << std::endl; }
 	|
-	expr OP_GREATER_THAN expr
+	expr OP_GREATER_THAN expr																					{ bison_outfile << "GREATER THAN ENCOUNTERED" << std::endl; }
 	|
 	expr OP_LESS_EQUAL expr
 	|
@@ -248,13 +248,13 @@ expr:
 	;
 
 literal:
-	INT_LITERAL
+	INT_LITERAL																												{ bison_outfile << "INT ENCOUNTERED=" << $1 << std::endl; }
 	|
-	CHAR_LITERAL
+	CHAR_LITERAL																											{ bison_outfile << "CHAR ENCOUNTERED=" << $1 << std::endl; }
 	|
-	TRUE
+	TRUE																															{ bison_outfile << "BOOLEAN ENCOUNTERED=true" << std::endl; }
 	|
-	FALSE
+	FALSE																															{ bison_outfile << "BOOLEAN ENCOUNTERED=false" << std::endl; }
 	;
 
 type:
