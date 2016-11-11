@@ -65,14 +65,6 @@ enum class Unary_Op : char {
 };
 
 // std::string parse_data_type(enum Data_Type t){
-  // switch (t) {
-  //   case Data_Type::int_type:
-  //     return "int";
-  //   case Data_Type::void_type:
-  //     return "void";
-  //   case Data_Type::bool_type:
-  //     return "bool";
-  // }
 // }
 
 
@@ -152,11 +144,15 @@ class Var_Decl {
   std::vector<Arr_Identifier *>    *arr_identifier;
 public:
   Var_Decl(Data_Type type, std::vector<Var_Identifier *> *identifier) {
-      this->identifier = identifier;
+      if(identifier) this->identifier = identifier;
+      else this->identifier = new std::vector<Var_Identifier *>();
+      this->arr_identifier = new std::vector<Arr_Identifier *>();
       this->type = type;
     }
   Var_Decl(Data_Type type, std::vector<Arr_Identifier *> *arr_identifier) {
-    this->arr_identifier = arr_identifier;
+    if(arr_identifier)  this->arr_identifier = arr_identifier;
+    else  this->arr_identifier = new std::vector<Arr_Identifier *>();
+    this->identifier = new std::vector<Var_Identifier *>();
     this->type = type;
   }
   std::vector<Var_Identifier *> *get_id_list(){
@@ -173,17 +169,16 @@ public:
     }
   }
   void print(){
-    //std::cout << "<variable_declaration type=\"" << parse_data_type(this->type) << "\" normal_count=\"" << this->identifier->size() << "\" arr_count=\"" << this->arr_identifier->size() << "\">" << std::endl;
+    std::cout << "<variable_declaration type=\"" << this->get_type() << "\" normal_count=\"" << this->identifier->size() << "\" arr_count=\"" << this->arr_identifier->size() << "\">" << std::endl;
     std::cout << "<normal_variables>" << std::endl;
     for(auto it : *identifier) {
       it->print();
     }
     std::cout << "</normal_variables>" << std::endl;
     std::cout << "<arr_variables>" << std::endl;
-    // @TODO
-    // for(auto it : *arr_identifier) {
-    //   it->print();
-    // }
+    for(auto it : *arr_identifier) {
+       it->print();
+    }
     std::cout << "</arr_variables>" << std::endl;
   }
 };
@@ -246,7 +241,7 @@ public:
 	If_Statement (Expression* condition, Statement* if_block, Statement* else_block) {
 		this->condition = condition;
 		this->if_block = if_block;
-		this->else_block = else_block;
+	  this->else_block = else_block;
 	}
 	Expression* get_condition() {
 		return this->condition;
@@ -659,7 +654,10 @@ public:
     std::vector<Type_Identifier *> *arguments, Block *my_block){
       this->id = id;
       this->return_type = return_type;
-      this->arguments = arguments;
+      if(arguments)
+        this->arguments = arguments;
+      else
+        this->arguments = new std::vector<Type_Identifier *>();
       this->my_block = my_block;
     }
   std::string get_id(){
@@ -682,10 +680,20 @@ public:
     return this->my_block;
   }
   void print() {
-    //std::cout << "<method_delcaration name=\"" << this->id << "\" return_type=\"" << parse_data_type(this->return_type) << "\" args_count=\"" << this->arguments->size() << "\">" << std::endl;
+    std::string test;
+    switch (this->return_type) {
+      case Data_Type::int_type:
+        test = "int"; break;
+      case Data_Type::void_type:
+        test = "void"; break;
+      case Data_Type::bool_type:
+        test = "bool"; break;
+    }
+    std::cout << "<method_delcaration name=\"" << this->id << "\" return_type=\"" << test << "\" args_count=\"" << this->arguments->size() << "\">" << std::endl;
     this->my_block->print();
     std::cout << "</method_delcaration>" << std::endl;
-  }  ~Method_Decl(){}
+  }
+  ~Method_Decl(){}
 };
 
 class Field_Decl {
@@ -695,19 +703,25 @@ class Field_Decl {
 public:
   Field_Decl(Data_Type data_type, std::vector<Var_Identifier *> *identifier){
     this->data_type = data_type;
-    this->identifier = identifier;
-    this->arr_identifier = NULL;
+    if(identifier) this->identifier = identifier;
+    else  this->identifier = new std::vector<Var_Identifier *>();
+    if(arr_identifier) this->arr_identifier = arr_identifier;
+    else  this->arr_identifier = new std::vector<Arr_Identifier *>();
   }
   Field_Decl(Data_Type data_type, std::vector<Arr_Identifier *> *arr_identifier){
     this->data_type = data_type;
-    this->arr_identifier = arr_identifier;
-    this->identifier = NULL;
+    if(arr_identifier) this->arr_identifier = arr_identifier;
+    else  this->arr_identifier = new std::vector<Arr_Identifier *>();
+    if(identifier) this->identifier = identifier;
+    else  this->identifier = new std::vector<Var_Identifier *>();
   }
   Field_Decl(Data_Type data_type, std::vector<Var_Identifier *> *identifier,
     std::vector<Arr_Identifier *> *arr_identifier){
       this->data_type = data_type;
-      this->arr_identifier = arr_identifier;
-      this->identifier = identifier;
+      if(identifier) this->identifier = identifier;
+      else  this->identifier = new std::vector<Var_Identifier *>();
+      if(arr_identifier) this->arr_identifier = arr_identifier;
+      else  this->arr_identifier = new std::vector<Arr_Identifier *>();
     }
   std::vector<Var_Identifier *> *get_idl(){
     return this->identifier;
@@ -726,12 +740,12 @@ public:
     }
   }
   void print() {
-    //for(auto it : *identifier) {
-      //std::cout << "<declaration name=\"" << it->get_id() << "\" type=\"" << parse_data_type(this->data_type) << "/>" << std::endl;
-    //}
-    //for(auto it : *arr_identifier){
-      //std::cout << "<declaration name=\"" << it->get_id() << "\" count=\"" << it->get_size() << "\" type=\"" << parse_data_type(this->data_type) << "/>" << std::endl;
-    //}
+    for(auto it : *identifier) {
+      std::cout << "<declaration name=\"" << it->get_id() << "\" type=\"" << this->get_data_type() << "/>" << std::endl;
+    }
+    for(auto it : *arr_identifier){
+      std::cout << "<declaration name=\"" << it->get_id() << "\" count=\"" << it->get_size() << "\" type=\"" << this->get_data_type() << "/>" << std::endl;
+    }
   }
   ~Field_Decl(){}
 };
@@ -744,8 +758,14 @@ public:
   Program(std::string id, std::vector<Field_Decl *> *field_decl_list,
     std::vector<Method_Decl *> *method_decl_list) {
        this->id = id;
-       this->method_decl_list = method_decl_list;
-       this->field_decl_list = field_decl_list;
+       if(method_decl_list)
+        this->method_decl_list = method_decl_list;
+      else
+        this->method_decl_list = new std::vector<Method_Decl *>();
+      if(field_decl_list)
+        this->field_decl_list = field_decl_list;
+      else
+        this->field_decl_list = new std::vector<Field_Decl *>();
      }
   std::string get_id(){
     return this->id;
