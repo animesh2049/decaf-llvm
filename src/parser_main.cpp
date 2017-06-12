@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-
+#include "classes.h"
 extern "C" FILE *yyin;
 extern "C" int yyparse();
 
 std::fstream flex_outfile, bison_outfile;
+Program *start;
 
 int main(int argc, char *argv[]){
 	if(argc != 2){
@@ -24,5 +25,6 @@ int main(int argc, char *argv[]){
 	while(!feof(yyin)){
 		yyparse();
 	}
+	start->print();
 	std::cout << "Success!" << std::endl;
 }

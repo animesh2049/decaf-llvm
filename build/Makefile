@@ -1,6 +1,6 @@
 OBJS = bison.o lex.o parser_main.o
 SRC_PATH = ../src
-CC	= g++
+CC	= g++ --std=c++11 -g
 CXXFLAGS	= -pedantic
 P_DIR = $(PWD)/../src
 BISON = bison
