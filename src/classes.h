@@ -64,10 +64,6 @@ enum class Unary_Op : char {
   op_not,
 };
 
-// std::string parse_data_type(enum Data_Type t){
-// }
-
-
 class Identifier {
 public:
   Identifier(){}
@@ -90,8 +86,8 @@ public:
   ~Var_Identifier(){}
 };
 
-class Arr_Identifier : public Identifier {
-  std::string id;
+class Arr_Identifier : public Identifier { // Why can't we just inherit Var_Identifier and
+  std::string id;                          // overide the consturctor and create new function get_size()
   int size;
 public:
   Arr_Identifier(std::string id, int size){
@@ -155,8 +151,19 @@ public:
     this->identifier = new std::vector<Var_Identifier *>();
     this->type = type;
   }
+  Var_Decl(Data_Type type, std::vector<Var_Identifier *> *identifier,
+    std::vector<Arr_Identifier *> *arr_identifier) {
+      if(identifier) this->identifier = identifier;
+      else this->identifier = new std::vector<Var_Identifier *>();
+      if (arr_identifier) this->arr_identifier = arr_identifier;
+      else this->arr_identifier = new std::vector<Arr_Identifier *>();
+      this->type = type;
+    }
   std::vector<Var_Identifier *> *get_id_list(){
     return this->identifier;
+  }
+  std::vector<Arr_Identifier *> *get_arr_id_list() {
+    return this->arr_identifier;
   }
   std::string get_type(){
     switch (this->type) {
@@ -166,6 +173,9 @@ public:
         return "void";
       case Data_Type::bool_type:
         return "bool";
+      default :
+        std::cout << "This data type is not supported" << std::endl;
+        exit(3);
     }
   }
   void print(){
@@ -255,7 +265,7 @@ public:
 		return this->else_block;
 	}
   void print(){
-    //std::cout << "<if_statement condition=\"" << this->condition << "\">" << std::endl;
+    std::cout << "<if_statement condition=\"" << this->condition << "\">" << std::endl;
     this->if_block->print();
     if (else_block) this->else_block->print();
     std::cout << "</if_statement>" << std::endl;
@@ -280,7 +290,8 @@ public:
   }
   void print(){
     std::cout << "<location id=\"" << this->id << "\">" << std::endl;
-  }};
+  }
+};
 
 class Arr_Location : public Location {
 	std::string id;
@@ -727,7 +738,7 @@ public:
     return this->identifier;
   }
   std::vector<Arr_Identifier *> *get_arr_idl(){
-    this->arr_identifier;
+    return this->arr_identifier;
   }
   std::string get_data_type(){
     switch (this->data_type) {
@@ -789,7 +800,8 @@ public:
     }
     std::cout << "</method_declarations>" << std::endl;
     std::cout << "</program>" << std::endl;
-  }  ~Program(){}
+  }
+  ~Program(){}
 };
 
 #endif

@@ -213,7 +213,6 @@ statements:
 statement:
 	block	{$$ = $1;}
 	|
-
 	location assign_op expr SEMICOLON	{$$ = new Assign_Statement($2, $1, $3);}
 	|
 	method_call SEMICOLON	{$$ = $1;}
@@ -254,7 +253,6 @@ method_call:
 	|
 	IDENTIFIER O_PAREN C_PAREN	{$$ = new Normal_Method(std::string($1), NULL);}
 	|
-
 	CALLOUT O_PAREN STRING_LITERAL C_PAREN	{$$ = new Callout_Method(std::string($3), NULL);}
 	|
 	CALLOUT O_PAREN STRING_LITERAL COMMA callout_args C_PAREN	{$$ = new Callout_Method(std::string($3), $5);}

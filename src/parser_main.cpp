@@ -1,11 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-#include "classes.h"
+
+#include "codegen.h"
+
 extern "C" FILE *yyin;
 extern "C" int yyparse();
 
-std::fstream flex_outfile, bison_outfile;
 Program *start;
 
 int main(int argc, char *argv[]){
@@ -20,11 +21,13 @@ int main(int argc, char *argv[]){
 	else {
 		yyin = myfile;
 	}
-	flex_outfile.open("flex_output.txt",std::ios_base::out);
-	bison_outfile.open("bison_output.txt",std::ios_base::out);
+
 	while(!feof(yyin)){
 		yyparse();
 	}
-	start->print();
+
+	Codegen codegen(start);
+
 	std::cout << "Success!" << std::endl;
+	return 0;
 }
