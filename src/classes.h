@@ -23,6 +23,7 @@ class Method_Call;
 class Block;
 class Statement;
 class For_Statement;
+class Assign_Statement;
 class If_Statement;
 class Return_Statement;
 class Continue_Statement;
@@ -335,9 +336,9 @@ public:
     }
     std::string get_binop(){
       switch (this->operation) {
-        case Bin_Op::op_plus:
-          return "+";
-        case Bin_Op::op_minus:
+        case Bin_Op::op_plus:      // Instead of returning string
+          return "+";              // Binop should be returned
+        case Bin_Op::op_minus:     // that will be useful later
           return "-";
         case Bin_Op::op_multiply:
           return "*";
@@ -671,9 +672,9 @@ public:
         this->arguments = new std::vector<Type_Identifier *>();
       this->my_block = my_block;
     }
-  std::string get_id(){
-    return this->id;
-  }
+  std::string get_id(){  // Instead of returning every attribute we could also
+    return this->id;     // declare a virtual function and then use that fucntion
+  }                      // for code generation in which case this won't be necessary
   std::string get_return_type(){
     switch (this->return_type) {
       case Data_Type::int_type:
@@ -765,6 +766,7 @@ class Program {
   std::string id;
   std::vector<Field_Decl *> *field_decl_list;
   std::vector<Method_Decl *> *method_decl_list;
+  Method_Decl *main_function;
 public:
   Program(std::string id, std::vector<Field_Decl *> *field_decl_list,
     std::vector<Method_Decl *> *method_decl_list) {
@@ -777,6 +779,10 @@ public:
         this->field_decl_list = field_decl_list;
       else
         this->field_decl_list = new std::vector<Field_Decl *>();
+
+      for (auto &it : (*method_decl_list)) {
+        if (it->get_id() == "main") main_function = it;
+      }
      }
   std::string get_id(){
     return this->id;
@@ -786,6 +792,9 @@ public:
   }
   std::vector<Method_Decl *> *get_mdls(){
     return this->method_decl_list;
+  }
+  Method_Decl *get_main_function() {
+    return this->main_function;
   }
   void print(){
     std::cout << "<program>" << std::endl;

@@ -14,7 +14,6 @@ extern int yylineno;
 extern std::fstream flex_outfile;
 extern std::fstream bison_outfile;
 extern Program *start;
-
 void yyerror(const char *s);
 %}
 

@@ -26,8 +26,11 @@ int main(int argc, char *argv[]){
 		yyparse();
 	}
 
-	Codegen codegen(start);
 
-	std::cout << "Success!" << std::endl;
+
+	/*Codegen *program_codegen = new Codegen(start);
+	program_codegen->generate_code();
+
+	std::cout << "Success!" << std::endl;*/
 	return 0;
 }
