@@ -334,7 +334,10 @@ public:
     Expression* get_right_expr(){
       return this->right;
     }
-    std::string get_binop(){
+    Bin_Op get_binop() {
+      return this->operation;
+    }
+    /*std::string get_binop(){
       switch (this->operation) {
         case Bin_Op::op_plus:      // Instead of returning string
           return "+";              // Binop should be returned
@@ -363,7 +366,7 @@ public:
         case Bin_Op::op_not_equal:
           return "!=";
       }
-    }
+    }*/
     void print(){
       std::string type;
       switch (this->operation) {
@@ -412,14 +415,17 @@ public:
 	Expression* get_expr() {
 		return this->expr;
 	}
-	std::string get_operation() {
+  Unary_Op get_operation() {
+    return this->operation;
+  }
+	/*std::string get_operation() {
     switch (this->operation) {
       case Unary_Op::op_minus:
         return "-";
       case Unary_Op::op_not:
         return "!";
     }
-	}
+	}*/
   void print(){
     std::string type;
     switch (this->operation) {

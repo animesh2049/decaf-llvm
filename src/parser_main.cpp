@@ -9,6 +9,8 @@ extern "C" int yyparse();
 
 Program *start;
 
+// Check error reproting in lexer and parser
+
 int main(int argc, char *argv[]){
 	if(argc != 2){
 		std::cerr << "Usage: parser inputfilepath\n" << std::endl;
